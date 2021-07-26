@@ -1,11 +1,15 @@
 /*
+ *
+ *
  *Author: Gustavo Oliveira Viana 
- * 
+ *Data inicio: 07/2021 
+ *
  * 
  * 
  */
 package com.viduan.main;
 
+//Imports do java 
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,9 +26,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.swing.JFrame;
 
+//Imports Internos 
 import com.viduan.entities.Coin;
 import com.viduan.entities.Enemy;
 import com.viduan.entities.Entity;
@@ -36,10 +40,13 @@ import com.viduan.world.Camera;
 import com.viduan.world.Tranformer;
 import com.viduan.world.World;
 
+
+//Inicio
 public class Game extends Canvas implements Runnable,KeyListener,MouseListener,MouseMotionListener{
 	
 	
 	//area de variaveis
+	//JFrame
 	private static final long serialVersionUID = 1L;
 	public static JFrame frame; 
 	private Thread thread;
@@ -48,42 +55,57 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	public static final int HEIGHT = 225;
 	public static final int SCALE = 2;
 	
+	//Fundo do JFrame
 	private BufferedImage image;
 	
-	public static int CUR_LEVEL = 1,MAX_LEVEL = 2;
+	//Variaveis do mundo
+	public static int CUR_LEVEL = 1,MAX_LEVEL = 3;
 	public static World world;
 	
+	
+	//Lista de entidades 
 	public static List<Entity> entities;
 	public static List<Enemy> enemies;
 	public static List<Coin> coin;
 	public static List<Tranformer> transformer;
 	public static List<FinishTile> finish;
  	
+	//Sistema para pegar Sprites
 	public static Spritesheet spritesheet;
+	
+	//Declara variavel do player
 	public static Player player;
 
+	//User Interface
 	public UI ui;
 
+	//Sistema de som
 	public Sound sound;
 	
+	//Sistema de interação com o mundo 
 	public static boolean seletor = false;
 	
+	//Inicia o GAMESTATE
 	public static String gameState = "MENU";
+	
+	//Sistema de gameOver
 	private boolean showMessageGameOver = true;
 	private int framesGameOver = 0;
 	private boolean restartGame = false;
 	
+	//Menu
 	public Menu menu;
 	
+	//Sistema de salvar jogo 
 	public static boolean saveGame = false;
 	
 	//Metodo construtor 
 	public Game(){
-		Sound.music.loop();
-		addKeyListener(this);
-		addMouseListener(this);
-		addMouseMotionListener(this);
-		setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
+		Sound.music.loop();//looping musica 
+		addKeyListener(this);//escuta o teclado
+		addMouseListener(this);//escuta o mouse 
+		addMouseMotionListener(this);//escuta o mouse 
+		setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));//muda o tamanho da janela 
 		initFrame();
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		
@@ -130,23 +152,16 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		}
 	}
 	
+	//Metodo main
 	public static void main(String args[]){
 		Game game = new Game();
 		game.start();
 	}
 	
-	public  int verifyCoin() {
-		Coin[] a = {};
-		int n = 0;
-		for(int i = 0; i < coin.size();i++) {
-			a[i] = coin.get(i);
-			if(a[i].getGotcha() == true) {
-				n=1;
-			}else {
-				n=0;
-			}
-		}
-		return n;
+	
+
+	public  void verifyCoin() {
+		//TODO 
 	}
 	
 	public void tick(){
@@ -154,10 +169,14 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		if(gameState == "NORMAL") {
 		
 			
+			//Caso vida do jogador chegar em zero 
 			if(Player.life <= 0) {
 				gameState = "GAME_OVER";
-			}	
+			}
+
 			this.restartGame = false;
+			
+			//"Liga" todas as entities
 			for(int i = 0; i < entities.size(); i++) {
 				Entity e = entities.get(i);
 				e.tick();
@@ -168,19 +187,23 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 				proxLevel();
 			
 			}
+			//Logica de TILE final 
 			if(FinishTile.finalLevel) {
 				proxLevel();
 				FinishTile.finalLevel=false;
 			}
 			
+			//Salva o jogo 
 			if(this.saveGame) {
 				
-				String[] opt1 = {"level","posX","posY","life"};
-				int[] opt2 = {this.CUR_LEVEL,player.getX(),player.getY(),(int) player.life};
+				String[] opt1 = {"level"};
+				int[] opt2 = {this.CUR_LEVEL};
 				Menu.saveGame(opt1,opt2,0);
 				this.saveGame = false;
 				
 			}
+		
+		//Sistema de mensagem de game over 
 		}else if(gameState == "GAME_OVER") {
 			this.framesGameOver++;
 			if(this.framesGameOver == 30) {
@@ -190,20 +213,19 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 					else
 						this.showMessageGameOver = true;
 			}
+			
+			//Recomeça o jogo 
 			if(restartGame ) {
 				restartGame();
 			}
+		
+		//Inicia o metodo do MENU
 		}else if(gameState == "MENU") {
 			
 			menu.tick();
-		}else if(gameState == "proxLevel") {
-			
-		}
-		
-		
-		
+		}	
 	}
-	
+	//Restart game
 	public void restartGame() {
 		this.restartGame = false;
 		this.gameState = "NORMAL";
@@ -212,6 +234,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		World.restartGame(newWorld);
 	}
 	
+	//Sistema de proximo level 
 	public void proxLevel() {
 		Camera.x = Camera.clamp((int)getX()-Game.WIDTH / 2, 0, World.WIDTH*World.TILE_SIZE - Game.WIDTH );
 		Camera.y = Camera.clamp((int)getY()-Game.HEIGHT / 2, 0, World.HEIGHT*World.TILE_SIZE - Game.HEIGHT);
@@ -227,7 +250,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	}
 
 
-	
+	//metodo de renderização
 	public void render(){
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null){
@@ -272,7 +295,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	
 	
 	
-	
+	//Game looping
 	public void run() {
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -303,51 +326,60 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		stop();
 	}
 
+	//Observa o teclado 
 	@Override
 	public void keyPressed(KeyEvent e){
+		
+		//Escuta tecla p/ confirmar ações 
 		if(e.getKeyCode() == KeyEvent.VK_E) {
 			seletor = true;
 		}
+		
+		//Sistema de "agachar"
 		if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			Player.speed =0.5;
 		}
+		//Entra no menu 
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-	
 			gameState = "MENU";
 			menu.pause = true;
-			
 		}
+		
+		//Confirmação no menu
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 			this.restartGame = true;
 			if(gameState == "MENU") {
 				menu.enter = true;
 			}
 		}
-		
+		//tecla de movimentação para a direita
 		if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT ) {
 			player.right = true;
-			player.moved = true;
-		}else if(e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
+			player.moved = true;	
+		}//tecla de movimentação para a esquerda 
+		else if(e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 			player.left = true;
 			player.moved = true;
 		}
-		
+		//tecla para o pulo 
 		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 			player.jump = true;
-		}if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+		}//Seleção de opcões no menu
+		if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 			if(gameState == "MENU") {
 				menu.up = true;
 			    Sound.troca.play();
 			}
-			}else if(e.getKeyCode() == KeyEvent.VK_S|| e.getKeyCode() == KeyEvent.VK_DOWN) {
-				if(gameState == "MENU") {
-					menu.down = true;
-					Sound.troca.play();
-				}
+		}//Seleção de opcões no menu
+		else if(e.getKeyCode() == KeyEvent.VK_S|| e.getKeyCode() == KeyEvent.VK_DOWN) {
+			if(gameState == "MENU") {
+				menu.down = true;
+				Sound.troca.play();
 			}
 		}
+	}
 
-
+	//caso a tecla seja solta 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_E) {
@@ -377,7 +409,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		
 		
 	}
-
+	//eventos de mouse 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub

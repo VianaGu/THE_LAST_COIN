@@ -85,19 +85,6 @@ public class Menu {
 					Game.gameState="NORMAL";
 					pause=false;
 					break;
-				case "posX":
-					int posx = Integer.parseInt(spl2[1]);
-					Game.player.setX(posx);
-					break;
-				case "posY":
-					int posy = Integer.parseInt(spl2[1]);
-					Game.player.setY(posy);
-					break;
-				case "life":
-					int curLife = Integer.parseInt(spl2[1]);
-					Game.player.life = curLife; 
-					break;
-				case "coin":
 					
 			}
 		}

@@ -16,7 +16,7 @@ import com.viduan.world.World;
 
 public class Entity {
 	
-	
+	//inicia todas a sprites de formas estatica 
 	public static BufferedImage PLAYER_SPRITE_LEFT_STOP = Game.spritesheet.getSprite(32, 224, 32, 32);
 	public static BufferedImage PLAYER_SPRITE_RIGHT_STOP = Game.spritesheet.getSprite(0, 224, 32, 32);
 	public static BufferedImage[] PLAYER_SPRITE_RIGHT = {Game.spritesheet.getSprite(0, 288, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(32, 288, World.TILE_SIZE, World.TILE_SIZE)};
@@ -25,19 +25,21 @@ public class Entity {
 	public static BufferedImage[] ENEMY1_LEFT = {Game.spritesheet.getSprite(288, 256, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(256, 256, World.TILE_SIZE, World.TILE_SIZE)};
 	public static BufferedImage[] ENEMY1_RIGHT = {Game.spritesheet.getSprite(288, 288, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(256, 288, World.TILE_SIZE, World.TILE_SIZE)};
 	
+	
 	protected double x;
 	protected double y;
 	protected int width;
 	protected int height;
 	protected double speed;
 	
-	public  boolean change = false;
+	public boolean change = false;
 	
-	
+	//Sistema para definir é renderizado mais em cima 
 	public static int depth;
 
 	protected List<Node> path;
 	
+	//Sistema de debug de mascara de contato
 	public boolean debug = false;
 	
 	public  BufferedImage sprite;

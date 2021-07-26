@@ -17,8 +17,7 @@ public class Saver extends Entity {
 	
 	public static void salvando() {
 		Game.saveGame=true;
-		System.out.println("To rodando");
-		
 	}
+	
 
 }

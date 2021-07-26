@@ -18,6 +18,11 @@ public class UI {
 		g.setColor(Color.white);
 		g.drawRect(10, 10, 250, 30);
 		
+		if(Game.saveGame != false) {
+			g.setFont(new Font("arial",Font.BOLD,20));
+			g.drawString("Jogo Salvo ", Game.WIDTH*Game.SCALE-230, 30);
+		}
+		
 		if(Player.maxCoins < 10) {
 			g.setFont(new Font("arial",Font.BOLD,17));
 			g.drawString("Moedas: "+ Player.currentCoins + "/"+Player.maxCoins, Game.WIDTH*Game.SCALE-100, 30);

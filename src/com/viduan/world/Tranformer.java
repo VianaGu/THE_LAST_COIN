@@ -28,19 +28,20 @@ public class Tranformer extends Entity{
 		super.render(g);
 	}
 	
-	public void test() {
+	//Adiciona moeda na aonde foi pre-determinado
+	public  void test() {
 		if(Sensor.sense == true &&  change == false) {
 			for(int i = 0; i < Game.transformer.size();i++){
 				Tranformer e = Game.transformer.get(i);
 				if(e instanceof Tranformer) {
-					if(e.change == false) {
+					if(e.change == false && e.sprite != Tile.TILE_WALL_CHANGE) {
 						e.sprite = Tile.TILE_WALL_CHANGE;
 						Coin coin = new Coin(e.getX(),e.getY(),World.TILE_SIZE,World.TILE_SIZE,1,Entity.COIN[0],1);
 						Game.entities.add(coin);	
 						Game.coin.add(coin); 
 						Player.maxCoins+=coin.getValue();
 						Sensor.sense=false;
-						e.change = true;
+						 
 						
 					}
 				}	

@@ -24,7 +24,7 @@ public class World {
 	public static int WIDTH,HEIGHT;
 	public static int TILE_SIZE = 32;
 	
-	
+	//criação do mapa
 	public World(String path){
 		try {
 			BufferedImage map = ImageIO.read(getClass().getResource(path));
@@ -42,14 +42,9 @@ public class World {
 						
 					}else if(pixelAtual == 0xFFffffff) {
 						tiles[xx + (yy * WIDTH)] = new WallTile(xx*TILE_SIZE,yy*TILE_SIZE,Tile.TILE_WALL);
-						if(yy-1 >= 0  &&  pixels[xx+((yy-1) * map.getWidth())] == 0xFFffffff ) {
+						if(yy-1 >= 0  &&  pixels[xx+((yy-1) * map.getWidth())] == 0xFFffffff || yy-1 >= 0  &&  pixels[xx+((yy-1) * map.getWidth())] == 0xFF606060 ) {
 							tiles[xx + (yy * WIDTH)] = new WallTile(xx*TILE_SIZE,yy*TILE_SIZE,Tile.TIEL_WALL1);
 						}
-					}else if(pixelAtual == 0xFF007F46) {
-						//Final 
-						FinishTile finale = new FinishTile(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TILE_FINAL);
-						Game.entities.add(finale);
-						Game.finish.add(finale);
 					}else if(pixelAtual == 0xFFB200FF) {
 						Saver saver = new Saver(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Game.spritesheet.getSprite(96, 0, 32, 32));
 						Game.entities.add(saver);
@@ -77,6 +72,11 @@ public class World {
 						Tranformer trans = new Tranformer(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TIEL_WALL1,0);
 						Game.entities.add(trans);
 						Game.transformer.add(trans);
+					}else if(pixelAtual == 0xFF007F46) {
+						//Final 
+						FinishTile finale = new FinishTile(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TILE_FINAL);
+						Game.entities.add(finale);
+						Game.finish.add(finale);
 					}
 					
 					
@@ -91,6 +91,7 @@ public class World {
 			e.printStackTrace();
 		}
 	}
+	//reinicia todos os itens do jogo 
 	public static void restartGame(String level){
 		Sound.music.loop();
 		Game.spritesheet = new Spritesheet("/spritesheet.png");
@@ -110,11 +111,11 @@ public class World {
 		Game.world = new World("/"+level);
 		Player.life=Player.maxLife;
 		Game.entities.add(Game.player);
-		
+		Sensor.sense=false;
 		return;
 	}
 	
-	
+	//confere se está livre proximo Tile
 	public static boolean isFree(int xnext,int ynext){
 		
 		int x1 = xnext / TILE_SIZE;
