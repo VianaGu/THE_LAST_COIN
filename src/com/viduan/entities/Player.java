@@ -58,6 +58,7 @@ public class Player extends Entity{
 		//Lógica dano no inimigo 
 		if(World.isFree((int)x+1, (int)(y+gravity)) && isJumping == false ) {
 			y+=gravity;
+			
 			for(int i = 0; i < Game.entities.size();i++){
 				Entity e = Game.entities.get(i);
 				if(e instanceof Enemy) {
@@ -65,6 +66,7 @@ public class Player extends Entity{
 							//Colisão na cabeça do inimigo 
 							vspd = -7;
 							jump = false;
+							Sound.jump.play();
 							//tirando vida do inimigo
 							((Enemy)e).life--;
 							if(((Enemy)e).life == 0){
@@ -88,6 +90,7 @@ public class Player extends Entity{
 		if(!World.isFree(getX(), (int)(y+1)) && jump) {
 			vspd = -7;
 			jump = false;
+			Sound.jump.play();
 		}
 		if(!World.isFree(getX(),(int)(y+vspd))) {
 			int signVsp = 0;
@@ -150,13 +153,20 @@ public class Player extends Entity{
 					break;
 				}
 			}
-			
+			//Sistema para salvar o jogo 
 			if(e instanceof Saver) {
 				if(Entity.isColidding(this, e)) {
 					if(Game.seletor) {
 						Game.seletor= false;
 						Saver.salvando();
-						
+						Sound.salvo.play();
+						Game.SaveGameShow = true;
+						for(int a = 0;a < Game.entities.size(); a++) {
+							Entity ee = Game.entities.get(a);
+								if(ee instanceof Saver) {
+									Game.entities.remove(a);
+								}
+						}
 					}
 				}
 			}

@@ -98,6 +98,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	
 	//Sistema de salvar jogo 
 	public static boolean saveGame = false;
+	public static boolean SaveGameShow = false;
 	
 	//Metodo construtor 
 	public Game(){
@@ -166,6 +167,8 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	
 	public void tick(){
 		
+	
+		
 		if(gameState == "NORMAL") {
 		
 			
@@ -198,7 +201,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 				
 				String[] opt1 = {"level"};
 				int[] opt2 = {this.CUR_LEVEL};
-				Menu.saveGame(opt1,opt2,0);
+				Menu.saveGame(opt1,opt2,10);
 				this.saveGame = false;
 				
 			}
@@ -221,7 +224,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		
 		//Inicia o metodo do MENU
 		}else if(gameState == "MENU") {
-			
+			player.updateCamera();
 			menu.tick();
 		}	
 	}
@@ -333,6 +336,9 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		//Escuta tecla p/ confirmar ações 
 		if(e.getKeyCode() == KeyEvent.VK_E) {
 			seletor = true;
+			if(gameState == "MENU") {
+				menu.enter = true;
+			}
 		}
 		
 		//Sistema de "agachar"
@@ -354,16 +360,19 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		}
 		//tecla de movimentação para a direita
 		if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT ) {
+			player.moved = true;
 			player.right = true;
-			player.moved = true;	
+				
 		}//tecla de movimentação para a esquerda 
 		else if(e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
-			player.left = true;
 			player.moved = true;
+			player.left = true;
+			
 		}
 		//tecla para o pulo 
 		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 			player.jump = true;
+			
 		}//Seleção de opcões no menu
 		if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 			if(gameState == "MENU") {
@@ -383,7 +392,10 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_E) {
-			
+			seletor = false;
+			if(gameState == "MENU") {
+				menu.enter = false;
+			}
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_SHIFT) {

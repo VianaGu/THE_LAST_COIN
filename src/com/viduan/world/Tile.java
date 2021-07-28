@@ -9,7 +9,7 @@ public class Tile {
 	
 	public static BufferedImage TILE_FLOOR = Game.spritesheet.getSprite(0,0,World.TILE_SIZE,World.TILE_SIZE);
 	public static BufferedImage TILE_WALL = Game.spritesheet.getSprite(32,0,World.TILE_SIZE,World.TILE_SIZE);
-	public static BufferedImage TIEL_WALL1 = Game.spritesheet.getSprite(32, 32, World.TILE_SIZE, World.TILE_SIZE);
+	public static BufferedImage TILE_WALL1 = Game.spritesheet.getSprite(32, 32, World.TILE_SIZE, World.TILE_SIZE);
 	public static BufferedImage TILE_WALL_CHANGE = Game.spritesheet.getSprite(0, 32, World.TILE_SIZE, World.TILE_SIZE);
 	public static BufferedImage TILE_FINAL = Game.spritesheet.getSprite(64, 0, World.TILE_SIZE, World.TILE_SIZE);
 

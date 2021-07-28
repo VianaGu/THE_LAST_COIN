@@ -17,6 +17,7 @@ import com.viduan.world.World;
 public class Entity {
 	
 	//inicia todas a sprites de formas estatica 
+	public static BufferedImage[] SAVER = {Game.spritesheet.getSprite(96, 0, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(128, 0, World.TILE_SIZE, World.TILE_SIZE) };
 	public static BufferedImage PLAYER_SPRITE_LEFT_STOP = Game.spritesheet.getSprite(32, 224, 32, 32);
 	public static BufferedImage PLAYER_SPRITE_RIGHT_STOP = Game.spritesheet.getSprite(0, 224, 32, 32);
 	public static BufferedImage[] PLAYER_SPRITE_RIGHT = {Game.spritesheet.getSprite(0, 288, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(32, 288, World.TILE_SIZE, World.TILE_SIZE)};

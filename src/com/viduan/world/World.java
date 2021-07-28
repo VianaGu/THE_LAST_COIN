@@ -42,11 +42,12 @@ public class World {
 						
 					}else if(pixelAtual == 0xFFffffff) {
 						tiles[xx + (yy * WIDTH)] = new WallTile(xx*TILE_SIZE,yy*TILE_SIZE,Tile.TILE_WALL);
-						if(yy-1 >= 0  &&  pixels[xx+((yy-1) * map.getWidth())] == 0xFFffffff || yy-1 >= 0  &&  pixels[xx+((yy-1) * map.getWidth())] == 0xFF606060 ) {
-							tiles[xx + (yy * WIDTH)] = new WallTile(xx*TILE_SIZE,yy*TILE_SIZE,Tile.TIEL_WALL1);
+						if(yy-1 >= 0  &&  pixels[xx+((yy-1) * map.getWidth())] == 0xFFffffff || yy-1 >= 0  &&  (pixels[xx+((yy-1) * map.getWidth())] == 0xFF606060 || pixels[xx+((yy-1) * map.getWidth())] == 0xFFFFE359 )) {
+							tiles[xx + (yy * WIDTH)] = new WallTile(xx*TILE_SIZE,yy*TILE_SIZE,Tile.TILE_WALL1);
 						}
+						
 					}else if(pixelAtual == 0xFFB200FF) {
-						Saver saver = new Saver(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Game.spritesheet.getSprite(96, 0, 32, 32));
+						Saver saver = new Saver(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Entity.SAVER[0]);
 						Game.entities.add(saver);
 					}else if(pixelAtual == 0xFF0026FF) {
 						//Jogador 
@@ -65,11 +66,11 @@ public class World {
 						Player.maxCoins+=coin.getValue();
 					}else if(pixelAtual == 0xFF606060) {
 						//Sensor
-						Sensor sensor = new Sensor(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TIEL_WALL1);
+						Sensor sensor = new Sensor(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TILE_WALL1);
 						Game.entities.add(sensor);
 					}else if(pixelAtual == 0xFFFFE359) {
 						//Pode virar moeda
-						Tranformer trans = new Tranformer(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TIEL_WALL1,0);
+						Tranformer trans = new Tranformer(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TILE_WALL1,0);
 						Game.entities.add(trans);
 						Game.transformer.add(trans);
 					}else if(pixelAtual == 0xFF007F46) {
@@ -78,16 +79,11 @@ public class World {
 						Game.entities.add(finale);
 						Game.finish.add(finale);
 					}
-					
-					
-					
-					
-					
-					
 				}
 			}
 		
 		} catch (IOException e) {
+			
 			e.printStackTrace();
 		}
 	}

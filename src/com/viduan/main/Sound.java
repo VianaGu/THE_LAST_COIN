@@ -43,7 +43,8 @@ public class Sound {
 	public static Clips coin = load("/Coin.wav",1);
 	public static Clips hurt = load("/hurt.wav",1);
 	public static Clips troca = load("/switch.wav",1); 
-	
+	public static Clips salvo = load("/saveGame.wav",1);
+	public static Clips jump = load("/jump.wav",1);
 	
 	private static Clips load(String name,int count) {
 		try {

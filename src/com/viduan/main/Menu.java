@@ -59,12 +59,17 @@ public class Menu {
 				Game.gameState = "NORMAL";
 				pause = false;
 				file = new File("save.txt");
-				file.delete();
+				if(options[currentOption] == "novo jogo") {
+					file.delete();
+				}
 			}else if(options[currentOption] == "carregar jogo") {
 				file = new File("save.txt");
-				if(file.exists()) {
-					String saver = loadGame(0);
+				if(saveExists) {
+					String saver = loadGame(10);
 					applySave(saver);
+				}
+				if(saveExists == false) {
+					currentOption = 0;
 				}
 			}else if(options[currentOption] == "sair") {
 				System.exit(1);
@@ -84,6 +89,7 @@ public class Menu {
 					World.restartGame("level"+spl2[1]+".png");
 					Game.gameState="NORMAL";
 					pause=false;
+					System.out.println("teste");
 					break;
 					
 			}
