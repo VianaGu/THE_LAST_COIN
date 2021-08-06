@@ -19,7 +19,7 @@ public class Tranformer extends Entity{
 	}
 	
 	public void tick() {
-		depth = 1;
+		depth = 3;
 		test();
 		super.tick();
 		

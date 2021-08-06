@@ -67,7 +67,7 @@ public class World {
 					}else if(pixelAtual == 0xFF606060) {
 						//Sensor
 						Sensor sensor = new Sensor(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TILE_WALL1);
-						Game.entities.add(sensor);
+						Game.entities.add(sensor); 
 					}else if(pixelAtual == 0xFFFFE359) {
 						//Pode virar moeda
 						Tranformer trans = new Tranformer(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TILE_WALL1,0);
@@ -89,7 +89,7 @@ public class World {
 	}
 	//reinicia todos os itens do jogo 
 	public static void restartGame(String level){
-		Sound.music.loop();
+		//Sound.music.loop();
 		Game.spritesheet = new Spritesheet("/spritesheet.png");
 		Game.entities.clear();
 		Game.enemies.clear();

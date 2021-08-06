@@ -156,11 +156,29 @@ public class Player extends Entity{
 			//Sistema para salvar o jogo 
 			if(e instanceof Saver) {
 				if(Entity.isColidding(this, e)) {
-					if(Game.seletor) {
-						Game.seletor= false;
+					if(Game.SIM) {
 						Saver.salvando();
 						Sound.salvo.play();
 						Game.SaveGameShow = true;
+						Game.seletor = false;
+						Game.SIM=false;
+						Game.NAO=false;
+						for(int a = 0;a < Game.entities.size(); a++) {
+							Entity ee = Game.entities.get(a);
+								if(ee instanceof Saver) {
+									Game.entities.remove(a);
+								}
+						}
+					}
+				}
+			}
+			
+			if(e instanceof Saver) {
+				if(Entity.isColidding(this, e)) {
+					if(Game.NAO) {
+						Game.seletor=false;
+						Game.NAO=false;
+						Game.SIM=false;
 						for(int a = 0;a < Game.entities.size(); a++) {
 							Entity ee = Game.entities.get(a);
 								if(ee instanceof Saver) {
@@ -194,7 +212,7 @@ public class Player extends Entity{
 				sprite = Entity.PLAYER_SPRITE_LEFT[curSprite];
 			}
 		
-		}else if(moved == false) {
+		}else {
 			if(dir == 1) {
 				sprite = Entity.PLAYER_SPRITE_RIGHT_STOP;
 			}else if(dir == -1) {

@@ -14,6 +14,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -23,9 +24,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.swing.JFrame;
 
 //Imports Internos 
@@ -34,6 +38,7 @@ import com.viduan.entities.Enemy;
 import com.viduan.entities.Entity;
 import com.viduan.entities.FinishTile;
 import com.viduan.entities.Player;
+import com.viduan.entities.Saver;
 import com.viduan.graficos.Spritesheet;
 import com.viduan.graficos.UI;
 import com.viduan.world.Camera;
@@ -55,6 +60,10 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	public static final int HEIGHT = 225;
 	public static final int SCALE = 2;
 	
+	public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelArt.ttf");
+	public static Font newFont;
+	public static Font font;
+	
 	//Fundo do JFrame
 	private BufferedImage image;
 	
@@ -72,6 +81,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
  	
 	//Sistema para pegar Sprites
 	public static Spritesheet spritesheet;
+	public static Spritesheet TITLE;
 	
 	//Declara variavel do player
 	public static Player player;
@@ -99,10 +109,12 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	//Sistema de salvar jogo 
 	public static boolean saveGame = false;
 	public static boolean SaveGameShow = false;
+	public static boolean SIM = false;
+	public static boolean NAO = false;
 	
 	//Metodo construtor 
 	public Game(){
-		Sound.music.loop();//looping musica 
+		//Sound.music.loop();//looping musica 
 		addKeyListener(this);//escuta o teclado
 		addMouseListener(this);//escuta o mouse 
 		addMouseMotionListener(this);//escuta o mouse 
@@ -112,6 +124,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		
 		//Inicializando objetos.
 		spritesheet = new Spritesheet("/spritesheet.png");
+		TITLE = new Spritesheet("/moeda_titulo.png");
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
 		coin = new ArrayList<Coin>();
@@ -124,6 +137,16 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		entities.add(player);
 		
 		menu = new Menu();
+		
+		
+		try {
+			newFont = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(30f);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 	
@@ -165,6 +188,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		//TODO 
 	}
 	
+
 	public void tick(){
 		
 	
@@ -273,6 +297,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 			e.render(g);
 		}
 		
+		
 		/***/
 		g.dispose();
 		g = bs.getDrawGraphics();
@@ -332,10 +357,19 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	//Observa o teclado 
 	@Override
 	public void keyPressed(KeyEvent e){
-		
+		if(e.getKeyCode() == KeyEvent.VK_S) {
+			SIM = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_N) {
+			NAO = true;
+			Saver.showMessage=false;
+		}
 		//Escuta tecla p/ confirmar ações 
 		if(e.getKeyCode() == KeyEvent.VK_E) {
-			seletor = true;
+			if(gameState == "NORMAL") {
+				seletor = true;
+			
+			}
 			if(gameState == "MENU") {
 				menu.enter = true;
 			}
@@ -392,7 +426,6 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_E) {
-			seletor = false;
 			if(gameState == "MENU") {
 				menu.enter = false;
 			}

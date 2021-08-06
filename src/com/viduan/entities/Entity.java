@@ -25,7 +25,7 @@ public class Entity {
 	public static BufferedImage[] COIN = {Game.spritesheet.getSprite(288, 0, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(224, 0, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(256, 0, World.TILE_SIZE, World.TILE_SIZE)};
 	public static BufferedImage[] ENEMY1_LEFT = {Game.spritesheet.getSprite(288, 256, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(256, 256, World.TILE_SIZE, World.TILE_SIZE)};
 	public static BufferedImage[] ENEMY1_RIGHT = {Game.spritesheet.getSprite(288, 288, World.TILE_SIZE, World.TILE_SIZE),Game.spritesheet.getSprite(256, 288, World.TILE_SIZE, World.TILE_SIZE)};
-	
+	public static BufferedImage[] COIN_TITLE = {Game.TITLE.getSprite(0, 0, 60, 60), Game.TITLE.getSprite(60, 0, 60, 60), Game.TITLE.getSprite(120, 0, 60, 60)};	
 	
 	protected double x;
 	protected double y;

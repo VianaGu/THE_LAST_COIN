@@ -18,6 +18,8 @@ import com.viduan.world.World;
 
 public class Menu {
 
+	
+
 	public String[] options = {"novo jogo","carregar jogo","sair"};
 	
 	public int currentOption = 0;
@@ -30,8 +32,14 @@ public class Menu {
 	public static boolean saveExists = false;
 	public static boolean savaGame = false;
 	
+	private int framesAnimation= 0;
+	private int maxFrames = 12;
+	private int curSprite = 0;
+	private int maxSprite = 3;
 	
 	public void tick() {
+		
+		
 		File file = new File("save.txt");
 		if(file.exists()) {
 			saveExists = true;
@@ -75,7 +83,11 @@ public class Menu {
 				System.exit(1);
 			}
 		}
+		
+		
+		
 	}
+	
 	
 	public static void applySave(String str) {
 		String[] spl = str.split("/");
@@ -95,6 +107,8 @@ public class Menu {
 			}
 		}
 	}
+	
+	
 	
 	public static String loadGame(int encode) {
 		String line = "";
@@ -159,7 +173,29 @@ public class Menu {
 		g.setFont(new Font("arial",Font.BOLD,36));
 		
 		//Nome do jogo
-		g.drawString(">THE LAST COIN<", ((Game.WIDTH*Game.SCALE) / 2)-150 , (Game.HEIGHT*Game.SCALE) / 2 - 160);
+		g.setFont(Game.newFont);
+		g.setColor(Color.white);
+		g.drawString("THE  LAST ", ((Game.WIDTH*Game.SCALE) / 2)-140 , (Game.HEIGHT*Game.SCALE) / 2 - 160);
+		g.setFont(Game.newFont);
+		
+		g.setColor(Color.yellow);
+		g.drawString("COIN", ((Game.WIDTH*Game.SCALE) / 2)+65 , (Game.HEIGHT*Game.SCALE) / 2 - 160);
+		
+		g.setColor(new Color(255,255,255,130));
+		g.fillRect((Game.WIDTH*Game.SCALE)/2+65,41,93 , 30);
+		
+		
+		
+		framesAnimation ++;
+		if(framesAnimation == maxFrames) {
+			curSprite++;
+			framesAnimation = 0; 
+			if(curSprite == maxSprite) {
+				curSprite = 0;
+			}
+		}
+		
+			g.drawImage(Entity.COIN_TITLE[curSprite], ((Game.WIDTH*Game.SCALE) / 2)+150 , 11, null);
 		
 		//Opcoes de menu
 		g.setColor(Color.white);
