@@ -12,6 +12,8 @@ import com.viduan.world.World;
 
 
 public class Player extends Entity{
+	
+	
 
 	public boolean moved = false;
 	public boolean right, left;
@@ -20,6 +22,7 @@ public class Player extends Entity{
 	public static int maxLife = 100;
 	public static double life = 100;
 	
+	public static int TOTAL_COINS = 0;
 	public static int currentCoins = 0;
 	public static int maxCoins;
 	
@@ -55,7 +58,7 @@ public class Player extends Entity{
 		
 		
 		
-		//Lógica dano no inimigo 
+		//Lï¿½gica dano no inimigo 
 		if(World.isFree((int)x+1, (int)(y+gravity)) && isJumping == false ) {
 			y+=gravity;
 			
@@ -63,7 +66,7 @@ public class Player extends Entity{
 				Entity e = Game.entities.get(i);
 				if(e instanceof Enemy) {
 					if(Entity.isColidding(this,e) ) {
-							//Colisão na cabeça do inimigo 
+							//Colisï¿½o na cabeï¿½a do inimigo 
 							vspd = -7;
 							jump = false;
 							Sound.jump.play();
@@ -85,7 +88,7 @@ public class Player extends Entity{
 		}
 		
 
-		//Lógica do pulo
+		//Lï¿½gica do pulo
 		vspd+=gravity;
 		if(!World.isFree(getX(), (int)(y+1)) && jump) {
 			vspd = -7;
@@ -107,7 +110,7 @@ public class Player extends Entity{
 		y = y +vspd;
 			
 			
-		//Colisão lateral	
+		//Colisï¿½o lateral	
 		if(right && World.isFree((int)(x+speed), (int)y)) {
 			x+=speed;
 			dir = 1;
@@ -129,7 +132,7 @@ public class Player extends Entity{
 					}
 				}
 			}
-			//Colisão com o sensor
+			//Colisï¿½o com o sensor
 			if(e instanceof Sensor) {
 				if(Entity.isColidding(this, e)) {
 					Sensor.sense = true;
@@ -143,7 +146,7 @@ public class Player extends Entity{
 					FinishTile.finalLevel = true;	
 				}
 			}
-			//Detectar colisão com a moeda e aumentar contagem 
+			//Detectar colisï¿½o com a moeda e aumentar contagem 
 			if(e instanceof Coin) {
 				if(Entity.isColidding(this, e) ) {
 					Game.entities.remove(i);

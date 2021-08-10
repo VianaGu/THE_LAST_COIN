@@ -20,11 +20,13 @@ import com.viduan.main.Sound;
 
 public class World {
 
+	
+	
 	public static Tile[] tiles;
 	public static int WIDTH,HEIGHT;
 	public static int TILE_SIZE = 32;
 	
-	//criação do mapa
+	//criaÃ§Ã£o do mapa
 	public World(String path){
 		try {
 			BufferedImage map = ImageIO.read(getClass().getResource(path));
@@ -78,7 +80,12 @@ public class World {
 						FinishTile finale = new FinishTile(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TILE_FINAL);
 						Game.entities.add(finale);
 						Game.finish.add(finale);
+					}else if(pixelAtual == 0xFF00fa0a) {
+						//Adiciona arvores
+						Tree tree = new Tree(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TREE);
+						Game.entities.add(tree);
 					}
+					
 				}
 			}
 		
@@ -89,7 +96,9 @@ public class World {
 	}
 	//reinicia todos os itens do jogo 
 	public static void restartGame(String level){
-		//Sound.music.loop();
+		Game.player.TOTAL_COINS = Game.player.TOTAL_COINS+Game.player.currentCoins;
+		Sound.gameOver.stop();
+		Sound.music.loop();
 		Game.spritesheet = new Spritesheet("/spritesheet.png");
 		Game.entities.clear();
 		Game.enemies.clear();
@@ -108,10 +117,11 @@ public class World {
 		Player.life=Player.maxLife;
 		Game.entities.add(Game.player);
 		Sensor.sense=false;
+		System.out.println(Game.player.TOTAL_COINS);
 		return;
 	}
 	
-	//confere se está livre proximo Tile
+	//confere se estï¿½ livre proximo Tile
 	public static boolean isFree(int xnext,int ynext){
 		
 		int x1 = xnext / TILE_SIZE;

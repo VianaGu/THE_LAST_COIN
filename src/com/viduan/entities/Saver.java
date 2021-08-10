@@ -22,7 +22,7 @@ public class Saver extends Entity {
 	public Saver(double x, double y, int width, int height, double speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
 		// TODO Auto-generated constructor stub
-		frases[0] = "Ol·! Deseja salvar o jogo?";
+		frases[0] = "Ol√°! Deseja salvar o jogo?";
 		  
 	}
 	public void tick() {
@@ -71,7 +71,7 @@ public class Saver extends Entity {
 				g.setColor(Color.black);
 				g.drawString(frases[0],30,50);
 				g.setFont(new Font("arial",Font.BOLD,9));
-				g.drawString("Digite S p/ sim e N p/ n„o", 37, 60);
+				g.drawString("Digite S p/ sim e N p/ n√£o", 37, 60);
 				
 			}
 		}

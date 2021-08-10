@@ -36,6 +36,9 @@ public class Sound {
 			if(clips == null) return;
 			clips[p].loop(300);
 		}
+		public void stop() {
+			clips[p].stop();
+		}
 
 	}
 	
@@ -45,6 +48,7 @@ public class Sound {
 	public static Clips troca = load("/switch.wav",1); 
 	public static Clips salvo = load("/saveGame.wav",1);
 	public static Clips jump = load("/jump.wav",1);
+	public static Clips gameOver = load("/gameOver.wav",1);
 	
 	private static Clips load(String name,int count) {
 		try {

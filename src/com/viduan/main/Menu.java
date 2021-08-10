@@ -75,6 +75,7 @@ public class Menu {
 				if(saveExists) {
 					String saver = loadGame(10);
 					applySave(saver);
+					currentOption = 0;
 				}
 				if(saveExists == false) {
 					currentOption = 0;
@@ -101,7 +102,6 @@ public class Menu {
 					World.restartGame("level"+spl2[1]+".png");
 					Game.gameState="NORMAL";
 					pause=false;
-					System.out.println("teste");
 					break;
 					
 			}

@@ -68,7 +68,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	private BufferedImage image;
 	
 	//Variaveis do mundo
-	public static int CUR_LEVEL = 1,MAX_LEVEL = 3;
+	public static int CUR_LEVEL = 1,MAX_LEVEL = 4;
 	public static World world;
 	
 	
@@ -92,7 +92,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	//Sistema de som
 	public Sound sound;
 	
-	//Sistema de interação com o mundo 
+	//Sistema de interaÃ§Ã£o com o mundo 
 	public static boolean seletor = false;
 	
 	//Inicia o GAMESTATE
@@ -114,7 +114,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	
 	//Metodo construtor 
 	public Game(){
-		//Sound.music.loop();//looping musica 
+		Sound.music.loop();//looping musica 
 		addKeyListener(this);//escuta o teclado
 		addMouseListener(this);//escuta o mouse 
 		addMouseMotionListener(this);//escuta o mouse 
@@ -131,7 +131,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		transformer = new ArrayList<Tranformer>();
 		finish = new ArrayList<FinishTile>();
 		player = new Player(WIDTH/2 - 30,HEIGHT/2,World.TILE_SIZE,World.TILE_SIZE,Player.speed,Entity.PLAYER_SPRITE_RIGHT[0]);
-		world = new World("/level1.png"); 	
+		world = new World("/level4.png"); 	
 		ui = new UI();
 		
 		entities.add(player);
@@ -194,7 +194,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	
 		
 		if(gameState == "NORMAL") {
-		
+			
 			
 			//Caso vida do jogador chegar em zero 
 			if(Player.life <= 0) {
@@ -232,6 +232,11 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		
 		//Sistema de mensagem de game over 
 		}else if(gameState == "GAME_OVER") {
+			if(CUR_LEVEL+1 > MAX_LEVEL) {
+				player.TOTAL_COINS = 0;
+			}
+			Sound.music.stop();
+			Sound.gameOver.loop();
 			this.framesGameOver++;
 			if(this.framesGameOver == 30) {
 				this.framesGameOver = 0;
@@ -241,7 +246,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 						this.showMessageGameOver = true;
 			}
 			
-			//Recomeça o jogo 
+			//Recomeï¿½a o jogo 
 			if(restartGame ) {
 				restartGame();
 			}
@@ -277,7 +282,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	}
 
 
-	//metodo de renderização
+	//metodo de renderizaï¿½ï¿½o
 	public void render(){
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null){
@@ -288,7 +293,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		g.setColor(new Color(122,102,255));
 		g.fillRect(0, 0,WIDTH,HEIGHT);
 		
-		/*Renderização do jogo*/
+		/*Renderizaï¿½ï¿½o do jogo*/
 		//Graphics2D g2 = (Graphics2D) g;
 		world.render(g);
 		Collections.sort(entities,Entity.nodeSorter);
@@ -364,7 +369,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 			NAO = true;
 			Saver.showMessage=false;
 		}
-		//Escuta tecla p/ confirmar ações 
+		//Escuta tecla p/ confirmar aï¿½ï¿½es 
 		if(e.getKeyCode() == KeyEvent.VK_E) {
 			if(gameState == "NORMAL") {
 				seletor = true;
@@ -385,19 +390,19 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 			menu.pause = true;
 		}
 		
-		//Confirmação no menu
+		//Confirmaï¿½ï¿½o no menu
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 			this.restartGame = true;
 			if(gameState == "MENU") {
 				menu.enter = true;
 			}
 		}
-		//tecla de movimentação para a direita
+		//tecla de movimentaï¿½ï¿½o para a direita
 		if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT ) {
 			player.moved = true;
 			player.right = true;
 				
-		}//tecla de movimentação para a esquerda 
+		}//tecla de movimentaï¿½ï¿½o para a esquerda 
 		else if(e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 			player.moved = true;
 			player.left = true;
@@ -407,13 +412,13 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 			player.jump = true;
 			
-		}//Seleção de opcões no menu
+		}//Seleï¿½ï¿½o de opcï¿½es no menu
 		if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 			if(gameState == "MENU") {
 				menu.up = true;
 			    Sound.troca.play();
 			}
-		}//Seleção de opcões no menu
+		}//Seleï¿½ï¿½o de opcï¿½es no menu
 		else if(e.getKeyCode() == KeyEvent.VK_S|| e.getKeyCode() == KeyEvent.VK_DOWN) {
 			if(gameState == "MENU") {
 				menu.down = true;
