@@ -92,7 +92,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	//Sistema de som
 	public Sound sound;
 	
-	//Sistema de interaÃ§Ã£o com o mundo 
+	//Sistema de interação com o mundo 
 	public static boolean seletor = false;
 	
 	//Inicia o GAMESTATE

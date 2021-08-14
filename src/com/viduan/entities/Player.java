@@ -8,12 +8,13 @@ import com.viduan.main.Game;
 import com.viduan.main.Sound;
 import com.viduan.world.Tile;
 import com.viduan.world.Tranformer;
+import com.viduan.world.Tree;
 import com.viduan.world.World;
 
 
 public class Player extends Entity{
 	
-	
+	public static boolean maisVida = false;
 
 	public boolean moved = false;
 	public boolean right, left;
@@ -154,6 +155,13 @@ public class Player extends Entity{
 					Player.currentCoins++;
 					Sound.coin.play();
 					break;
+				}
+			}
+			if(e instanceof Tree) {
+				if(Entity.isColidding(this, e) && Game.seletor == true) {
+					Game.seletor=false;
+					e.sprite=Tile.TREE_EMPTY;
+					this.maisVida = true;
 				}
 			}
 			//Sistema para salvar o jogo 
