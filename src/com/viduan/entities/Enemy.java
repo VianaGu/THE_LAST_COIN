@@ -30,6 +30,7 @@ public class Enemy extends Entity{
 	}
 	public void tick() {
 		depth = 1;
+		this.checkCollidingBullet();
 		if(World.isFree((int)x, (int)(y+gravity)) ) {
 			y+=gravity;
 		}
@@ -58,6 +59,22 @@ public class Enemy extends Entity{
 			}
 		}
 	}
+	
+	public void checkCollidingBullet() {
+		for(int i =0; i<Game.bullet.size();i++) {
+			Entity e = Game.bullet.get(i);
+			if(e instanceof BulletShoot) {
+				if(Entity.isColidding(this,e)) {
+					life-= Game.rand.nextInt(7);
+					Game.bullet.remove(i);
+					System.out.print("To aqui");
+					return;
+				}
+			}
+		}
+		
+	}
+	
 	
 	public void render(Graphics g) {
 		framesAnimation ++;

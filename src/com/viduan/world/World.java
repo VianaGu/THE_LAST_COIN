@@ -11,9 +11,11 @@ import com.viduan.entities.Coin;
 import com.viduan.entities.Enemy;
 import com.viduan.entities.Entity;
 import com.viduan.entities.FinishTile;
+import com.viduan.entities.Particle;
 import com.viduan.entities.Player;
 import com.viduan.entities.Saver;
 import com.viduan.entities.Sensor;
+import com.viduan.entities.Weapon;
 import com.viduan.graficos.Spritesheet;
 import com.viduan.main.Game;
 import com.viduan.main.Sound;
@@ -47,7 +49,6 @@ public class World {
 						if(yy-1 >= 0  &&  pixels[xx+((yy-1) * map.getWidth())] == 0xFFffffff || yy-1 >= 0  &&  (pixels[xx+((yy-1) * map.getWidth())] == 0xFF606060 || pixels[xx+((yy-1) * map.getWidth())] == 0xFFFFE359 )) {
 							tiles[xx + (yy * WIDTH)] = new WallTile(xx*TILE_SIZE,yy*TILE_SIZE,Tile.TILE_WALL1);
 						}
-						
 					}else if(pixelAtual == 0xFFB200FF) {
 						Saver saver = new Saver(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Entity.SAVER[0]);
 						Game.entities.add(saver);
@@ -55,6 +56,7 @@ public class World {
 						//Jogador 
 						Game.player.setX(xx*TILE_SIZE);
 						Game.player.setY(yy*TILE_SIZE);
+						
 					}else if(pixelAtual == 0xFFFF0000) {
 						//Inimigo
 						Enemy enemy = new Enemy(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Entity.ENEMY1_RIGHT[0]);
@@ -84,6 +86,10 @@ public class World {
 						//Adiciona arvores
 						Tree tree = new Tree(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Tile.TREE);
 						Game.entities.add(tree);
+					}else if(pixelAtual == 0xFF5B7F00) {
+						Weapon weapon = new Weapon(xx*TILE_SIZE,yy*TILE_SIZE,TILE_SIZE,TILE_SIZE,1,Entity.WEAPON[0]);
+						Game.entities.add(weapon);
+						Game.weapon.add(weapon);
 					}
 					
 				}
@@ -92,6 +98,32 @@ public class World {
 		} catch (IOException e) {
 			
 			e.printStackTrace();
+		}
+	}
+	
+	public static boolean isFreeDynamic(int xnext,int ynext, int width,int height) {
+		int x1 = xnext /TILE_SIZE;
+		int y1 = ynext /TILE_SIZE;
+		
+		int x2 = (xnext+width-1) /TILE_SIZE;
+		int y2 = ynext /TILE_SIZE;
+		
+		int x3 = xnext /TILE_SIZE;
+		int y3 = (ynext+height-1) /TILE_SIZE;
+		
+		int x4 = (xnext+width-1) /TILE_SIZE;
+		int y4 = (ynext+height-1) /TILE_SIZE;
+		
+		return !((tiles[x1+(y1*World.WIDTH)] instanceof WallTile)||
+				(tiles[x2+(y2*World.WIDTH)] instanceof WallTile) ||
+				(tiles[x3+(y3*World.WIDTH)] instanceof WallTile) ||
+				(tiles[x4+(y4*World.WIDTH)] instanceof WallTile));
+	}
+	
+	public static void generateParticles(int amount,int x,int y) {
+		for(int i = 0;i < amount;i++) {
+			Game.entities.add(new Particle(x,y,1,1,2,null));
+			
 		}
 	}
 	//reinicia todos os itens do jogo 
@@ -117,7 +149,7 @@ public class World {
 		Player.life=Player.maxLife;
 		Game.entities.add(Game.player);
 		Sensor.sense=false;
-		System.out.println(Game.player.TOTAL_COINS);
+		Saver.showMessage=false;
 		return;
 	}
 	

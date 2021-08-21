@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import com.viduan.main.Game;
 import com.viduan.main.Sound;
+import com.viduan.world.Camera;
 import com.viduan.world.Tile;
 import com.viduan.world.Tranformer;
 import com.viduan.world.Tree;
@@ -15,6 +16,8 @@ import com.viduan.world.World;
 public class Player extends Entity{
 	
 	public static boolean maisVida = false;
+	
+	
 
 	public boolean moved = false;
 	public boolean right, left;
@@ -29,6 +32,14 @@ public class Player extends Entity{
 	
 	private double gravity = 0.3;
 	private double vspd = 0;
+	
+	public int mx, my;
+	public boolean mouseShoot = false;
+    public boolean shoot = false;
+    public static boolean hasGun = false;
+	public boolean equipGun = true;
+	public int ammo = 100;
+	public int z = 0;
 	
 	public int dir = 1;
 	
@@ -49,11 +60,11 @@ public class Player extends Entity{
 	
 	public Player(int x, int y, int width, int height,double speed,BufferedImage sprite) {
 		super(x, y, width, height,speed,sprite);
-		
+		depth = 0;
 	}
 	
 	public void tick(){
-		depth = 2;
+	
 		//debug = true;
 		
 		
@@ -147,7 +158,7 @@ public class Player extends Entity{
 					FinishTile.finalLevel = true;	
 				}
 			}
-			//Detectar colisï¿½o com a moeda e aumentar contagem 
+			//Detectar colisão com a moeda e aumentar contagem 
 			if(e instanceof Coin) {
 				if(Entity.isColidding(this, e) ) {
 					Game.entities.remove(i);
@@ -158,27 +169,31 @@ public class Player extends Entity{
 				}
 			}
 			if(e instanceof Tree) {
-				if(Entity.isColidding(this, e) && Game.seletor == true) {
-					Game.seletor=false;
-					e.sprite=Tile.TREE_EMPTY;
-					this.maisVida = true;
+				if(Entity.isColidding(this, e) && Game.seletor == true && ((Tree)e).sprite!=Tile.TREE_EMPTY && life<maxLife) {
+					Sound.eat.play();
+					Sound.eat2.play();
+					Sound.eat3.play();
+					maisVida =true;
+					e.sprite = Tile.TREE_EMPTY;
 				}
 			}
 			//Sistema para salvar o jogo 
 			if(e instanceof Saver) {
 				if(Entity.isColidding(this, e)) {
-					if(Game.SIM) {
-						Saver.salvando();
-						Sound.salvo.play();
-						Game.SaveGameShow = true;
-						Game.seletor = false;
-						Game.SIM=false;
-						Game.NAO=false;
-						for(int a = 0;a < Game.entities.size(); a++) {
-							Entity ee = Game.entities.get(a);
-								if(ee instanceof Saver) {
-									Game.entities.remove(a);
-								}
+					if(Saver.showMessage==true) {
+						if(Game.SIM) {
+							Saver.salvando();
+							Sound.salvo.play();
+							Game.SaveGameShow = true;
+							Game.seletor = false;
+							Game.SIM=false;
+							Game.NAO=false;
+							for(int a = 0;a < Game.entities.size(); a++) {
+								Entity ee = Game.entities.get(a);
+									if(ee instanceof Saver) {
+										Game.entities.remove(a);
+									}
+							}
 						}
 					}
 				}
@@ -201,13 +216,55 @@ public class Player extends Entity{
 			}
 		}
 		updateCamera();
+		checkCollisonGun();
 		
+		if(mouseShoot) {
+			mouseShoot = false;
+			if(this.equipGun == false) {
+				this.equipGun = true;
+			}
+			else if(hasGun && ammo > 0) {
+			Sound.soundShoot.play();			
+
+			ammo--;
+			double angle = 0;
+			int px= 0,py = 8;
+			if(dir == 1) {
+				 px = 18;
+				 angle = Math.atan2(my - (this.getY()+py - Camera.y)  ,mx - (this.getX()+8 - Camera.x));
+			}else {
+				 px = -8;
+				 angle = Math.atan2(my - (this.getY()+py - Camera.y)  ,mx - (this.getX()+8 - Camera.x));
+			}
+			double dx = Math.cos(angle);
+			double dy = Math.sin(angle);
+
+			BulletShoot bullet = new BulletShoot(this.getX()+px,this.getY()+py,3,3,4.0,null,dx,dy);
+			Game.bullet.add(bullet);
+			
+			}
+	}
 		
-		
+	}
+	
+	public void checkCollisonGun() {
+		for(int i = 0; i < Game.weapon.size();i++) {
+			Entity atual = Game.weapon.get(i);
+			if(atual instanceof Weapon) {
+				
+				if(Entity.isColidding(this, atual)) {
+					hasGun = true;
+					Game.entities.remove(atual);
+					Game.weapon.remove(atual);
+					
+				}
+			}
+		}
 	}
 	
 	
 	public void render(Graphics g) {
+		
 		if(moved == true) {
 			framesAnimation ++;
 			if(framesAnimation == maxFrames) {
@@ -219,15 +276,28 @@ public class Player extends Entity{
 			}
 			if(dir == 1) {
 				sprite = Entity.PLAYER_SPRITE_RIGHT[curSprite];
+				if(this.hasGun && equipGun) {
+					g.drawImage(Entity.WEAPON_PICKED[0],this.getX()+7-Camera.x,this.getY()-4-Camera.y,null);
+				}
 			}else if(dir == -1) {
 				sprite = Entity.PLAYER_SPRITE_LEFT[curSprite];
+				if(this.hasGun && equipGun) {
+					g.drawImage(Entity.WEAPON_PICKED[1],this.getX()+5-Camera.x,this.getY()-4-Camera.y,null);
+				}
+
 			}
 		
 		}else {
 			if(dir == 1) {
 				sprite = Entity.PLAYER_SPRITE_RIGHT_STOP;
+				if(this.hasGun && equipGun) {
+					g.drawImage(Entity.WEAPON_PICKED[0],this.getX()+7-Camera.x,this.getY()-4-Camera.y,null);
+				}
 			}else if(dir == -1) {
 				sprite = Entity.PLAYER_SPRITE_LEFT_STOP;
+				if(this.hasGun && equipGun) {
+					g.drawImage(Entity.WEAPON_PICKED[1],this.getX()+5-Camera.x,this.getY()-4-Camera.y,null);
+				}
 			}
 		
 		}

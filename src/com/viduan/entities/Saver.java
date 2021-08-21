@@ -22,7 +22,7 @@ public class Saver extends Entity {
 	public Saver(double x, double y, int width, int height, double speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
 		// TODO Auto-generated constructor stub
-		frases[0] = "Ol√°! Deseja salvar o jogo?";
+		frases[0] = "Ol·! Deseja salvar o jogo?";
 		  
 	}
 	public void tick() {
@@ -39,7 +39,10 @@ public class Saver extends Entity {
 		
 		if(Math.abs(xPlayer-xSaver) < 20 &&
 				Math.abs(yPlayer-ySaver) < 20) {
-			showMessage = true;
+			if(Game.seletor==true) {
+				showMessage = true;
+			}
+			
 			
 		}else {
 			showMessage = false;
@@ -61,7 +64,6 @@ public class Saver extends Entity {
 			
 			
 		super.render(g);
-		if(Game.seletor == true) {
 			if(showMessage == true) {
 				g.setColor(Color.black);
 				g.drawRect(9, 21,Game.WIDTH-249,Game.HEIGHT-149);
@@ -71,10 +73,10 @@ public class Saver extends Entity {
 				g.setColor(Color.black);
 				g.drawString(frases[0],30,50);
 				g.setFont(new Font("arial",Font.BOLD,9));
-				g.drawString("Digite S p/ sim e N p/ n√£o", 37, 60);
+				g.drawString("Digite S p/ sim e N p/ n„o", 37, 60);
 				
 			}
-		}
+		
 	}
 	public static void salvando() {
 		Game.saveGame=true;

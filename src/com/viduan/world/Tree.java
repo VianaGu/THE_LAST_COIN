@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.viduan.entities.Entity;
 import com.viduan.main.Game;
+import com.viduan.main.Sound;
 
 public class Tree extends Entity{
 	
@@ -19,6 +20,7 @@ public class Tree extends Entity{
 		if(Game.player.maisVida==true) {
 			Game.player.maisVida=false;
 			ganharVida();
+			
 		}
 	}
 	
@@ -28,7 +30,7 @@ public class Tree extends Entity{
 	
 	
 	public void ganharVida() {
-		if(Game.player.life >= 100) {
+		if((Game.player.life+20) >= 100) {
 			Game.player.life=100;
 		}else {
 			Game.player.life+=20;

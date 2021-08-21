@@ -29,9 +29,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.viduan.entities.Bullet;
+import com.viduan.entities.BulletShoot;
 //Imports Internos 
 import com.viduan.entities.Coin;
 import com.viduan.entities.Enemy;
@@ -39,6 +42,7 @@ import com.viduan.entities.Entity;
 import com.viduan.entities.FinishTile;
 import com.viduan.entities.Player;
 import com.viduan.entities.Saver;
+import com.viduan.entities.Weapon;
 import com.viduan.graficos.Spritesheet;
 import com.viduan.graficos.UI;
 import com.viduan.world.Camera;
@@ -64,6 +68,9 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	public static Font newFont;
 	public static Font font;
 	
+	
+	public static Random rand;
+	public int mx,my;
 	//Fundo do JFrame
 	private BufferedImage image;
 	
@@ -78,6 +85,9 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	public static List<Coin> coin;
 	public static List<Tranformer> transformer;
 	public static List<FinishTile> finish;
+	public static List<BulletShoot>bullet;
+	public static List<Weapon> weapon;
+	public static List<Bullet> ammo;
  	
 	//Sistema para pegar Sprites
 	public static Spritesheet spritesheet;
@@ -123,15 +133,21 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		
 		//Inicializando objetos.
-		spritesheet = new Spritesheet("/spritesheet.png");
-		TITLE = new Spritesheet("/moeda_titulo.png");
 		entities = new ArrayList<Entity>();
 		enemies = new ArrayList<Enemy>();
 		coin = new ArrayList<Coin>();
+		bullet = new ArrayList<BulletShoot>();
+		ammo = new ArrayList<Bullet>();
+		weapon = new ArrayList<Weapon>();
 		transformer = new ArrayList<Tranformer>();
 		finish = new ArrayList<FinishTile>();
+		
+		spritesheet = new Spritesheet("/spritesheet.png");
+		TITLE = new Spritesheet("/moeda_titulo.png");
+		
+		
 		player = new Player(WIDTH/2 - 30,HEIGHT/2,World.TILE_SIZE,World.TILE_SIZE,Player.speed,Entity.PLAYER_SPRITE_RIGHT[0]);
-		world = new World("/level4.png"); 	
+		world = new World("/level1.png"); 	
 		ui = new UI();
 		
 		entities.add(player);
@@ -182,12 +198,6 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		game.start();
 	}
 	
-	
-
-	public  void verifyCoin() {
-		//TODO 
-	}
-	
 
 	public void tick(){
 		
@@ -207,6 +217,9 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 			for(int i = 0; i < entities.size(); i++) {
 				Entity e = entities.get(i);
 				e.tick();
+			}
+			for(int i = 0; i < bullet.size(); i++) {
+				bullet.get(i).tick();
 			}
 			
 			//Logica de passar de level por coletar todas as moedas
@@ -296,12 +309,15 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		/*Renderiza��o do jogo*/
 		//Graphics2D g2 = (Graphics2D) g;
 		world.render(g);
+		
 		Collections.sort(entities,Entity.nodeSorter);
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.render(g);
 		}
-		
+		for(int i = 0; i < bullet.size(); i++) {
+			bullet.get(i).render(g);
+		}
 		
 		/***/
 		g.dispose();
@@ -430,9 +446,15 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	//caso a tecla seja solta 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.shoot = true;
+		}
 		if(e.getKeyCode() == KeyEvent.VK_E) {
 			if(gameState == "MENU") {
 				menu.enter = false;
+			}
+			if(gameState == "NORMAL") {
+				this.seletor=false;
 			}
 		}
 		
@@ -461,7 +483,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	}
 	//eventos de mouse 
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -486,6 +508,11 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 
 	@Override
 	public void mousePressed(MouseEvent e) {	
+		player.mouseShoot = true;
+		int scale = frame.getWidth()/WIDTH;
+		
+		player.mx = (e.getX() /scale);
+		player.my = (e.getY() /scale);
 	}
 
 	@Override
@@ -502,7 +529,8 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-	
+		this.mx = e.getX();
+		this.my = e.getY();
 	}
 
 	

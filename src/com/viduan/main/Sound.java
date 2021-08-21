@@ -49,6 +49,10 @@ public class Sound {
 	public static Clips salvo = load("/saveGame.wav",1);
 	public static Clips jump = load("/jump.wav",1);
 	public static Clips gameOver = load("/gameOver.wav",1);
+	public static Clips eat = load("/eat.wav",1);
+	public static Clips eat2 = load("/eat2.wav",1);
+	public static Clips eat3 = load("/eat3.wav",1);
+	public static Clips soundShoot = load("/soundShoot.wav",1);
 	
 	private static Clips load(String name,int count) {
 		try {
